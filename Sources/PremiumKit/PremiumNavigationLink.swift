@@ -7,16 +7,19 @@ public struct PremiumNavigationLink<Destination: View, StoreView: View, Label: V
     @Environment(\.isLockable)
     var isLockable
     
+    @ViewBuilder 
     let destination: () -> Destination
     
+    @ViewBuilder
     let storeView: () -> StoreView
     
+    @ViewBuilder
     let label: () -> Label
     
     public init(
-        destination: @escaping () -> Destination,
-        storeView: @escaping () -> StoreView,
-        label: @escaping () -> Label
+        @ViewBuilder destination: @escaping () -> Destination,
+        @ViewBuilder storeView: @escaping () -> StoreView,
+        @ViewBuilder label: @escaping () -> Label
     ) {
         self.destination = destination
         self.storeView = storeView

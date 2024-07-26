@@ -12,11 +12,16 @@ public struct PremiumButton<Label: View, StoreView: View>: View {
     
     let action: () -> Void
     
+    @ViewBuilder
     let storeView: () -> StoreView
     
+    @ViewBuilder
     let label: () -> Label
     
-    public init(action: @escaping () -> Void, label: @escaping () -> Label, storeView: @escaping () -> StoreView) {
+    public init(
+        action: @escaping () -> Void,
+        @ViewBuilder label: @escaping () -> Label,
+        @ViewBuilder storeView: @escaping () -> StoreView) {
         self.action = action
         self.label = label
         self.storeView = storeView
