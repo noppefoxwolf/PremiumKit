@@ -11,63 +11,27 @@ struct ContentView: View {
     @State
     var isOn: Bool = false
     
+    enum SelectionValue: String, CaseIterable {
+        case dog
+        case cat
+        case fox
+        case duck
+    }
+    
+    @State
+    var selection: SelectionValue = .fox
+    
     var body: some View {
         NavigationView {
             List {
                 Section(content: {
-                    PremiumNavigationLink {
-                        EmptyView()
-                    } label: {
-                        Text("Hello, World!")
-                    }
-                    
-                    PremiumButton(
-                        action: {
-                            isPresented.toggle()
-                        },
-                        label: {
-                            Text("App Icon")
-                        }
-                    )
-                    
-                    PremiumToggle(
-                        isOn: $isOn,
-                        label: {
-                            Text("Show User Info")
-                        },
-                        storeView: {
-                            Text("Store")
-                        }
-                    )
+                    components
                 }, header: {
                     Text("Lockable = true")
                 }).lockable()
                 
                 Section(content: {
-                    PremiumNavigationLink {
-                        EmptyView()
-                    } label: {
-                        Text("Hello, World!")
-                    }
-                    
-                    PremiumButton(
-                        action: {
-                            isPresented.toggle()
-                        },
-                        label: {
-                            Text("App Icon")
-                        }
-                    )
-                    
-                    PremiumToggle(
-                        isOn: $isOn,
-                        label: {
-                            Text("Show User Info")
-                        },
-                        storeView: {
-                            Text("Store")
-                        }
-                    )
+                    components
                 }, header: {
                     Text("Lockable = false")
                 })
@@ -84,6 +48,49 @@ struct ContentView: View {
             ChildView()
         })
         .environment(\.isPremium, isPremium)
+    }
+    
+    @ViewBuilder
+    var components: some View {
+        PremiumNavigationLink {
+            EmptyView()
+        } label: {
+            Text("Hello, World!")
+        }
+        
+        PremiumButton(
+            action: {
+                isPresented.toggle()
+            },
+            label: {
+                Text("App Icon")
+            }
+        )
+        
+        PremiumToggle(
+            isOn: $isOn,
+            label: {
+                Text("Show User Info")
+            },
+            storeView: {
+                Text("Store")
+            }
+        )
+        
+        PremiumPicker(
+            selection: $selection,
+            content: {
+                ForEach(SelectionValue.allCases, id: \.self) { value in
+                    Text(value.rawValue).tag(value.rawValue)
+                }
+            },
+            label: {
+                Text("Who is favourite animal?")
+            },
+            storeView: {
+                Text("Store")
+            }
+        )
     }
 }
 
