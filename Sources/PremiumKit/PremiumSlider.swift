@@ -28,7 +28,7 @@ public struct PremiumSlider<Value: BinaryFloatingPoint, ValueLabel: View, Label:
     
     public init(
         value: Binding<Value>,
-        inRange: ClosedRange<Value>,
+        in inRange: ClosedRange<Value>,
         step: Value.Stride,
         label: @escaping () -> Label,
         minimumValueLabel: @escaping () -> ValueLabel,

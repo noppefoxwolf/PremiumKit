@@ -18,12 +18,12 @@ public struct PremiumNavigationLink<Destination: View, StoreView: View, Label: V
     
     public init(
         @ViewBuilder destination: @escaping () -> Destination,
-        @ViewBuilder storeView: @escaping () -> StoreView,
-        @ViewBuilder label: @escaping () -> Label
+        @ViewBuilder label: @escaping () -> Label,
+        @ViewBuilder storeView: @escaping () -> StoreView
     ) {
         self.destination = destination
-        self.storeView = storeView
         self.label = label
+        self.storeView = storeView
     }
     
     public var body: some View {
