@@ -8,43 +8,77 @@ struct ContentView: View {
     @State
     var isPresented: Bool = false
     
+    @State
+    var isOn: Bool = false
+    
     var body: some View {
         NavigationView {
             List {
-                PremiumNavigationLink {
-                    EmptyView()
-                } label: {
-                    Text("Hello, World!")
-                }
-                
-                PremiumNavigationLink {
-                    EmptyView()
-                } label: {
-                    Text("Hello, World!")
-                }.lockable()
-                
-                PremiumButton(
-                    action: {
-                        isPresented.toggle()
-                    },
-                    label: {
-                        Text("App Icon")
+                Section(content: {
+                    PremiumNavigationLink {
+                        EmptyView()
+                    } label: {
+                        Text("Hello, World!")
                     }
-                )
+                    
+                    PremiumButton(
+                        action: {
+                            isPresented.toggle()
+                        },
+                        label: {
+                            Text("App Icon")
+                        }
+                    )
+                    
+                    PremiumToggle(
+                        isOn: $isOn,
+                        label: {
+                            Text("Show User Info")
+                        },
+                        storeView: {
+                            Text("Store")
+                        }
+                    )
+                }, header: {
+                    Text("Lockable = true")
+                }).lockable()
                 
-                PremiumButton(
-                    action: {
-                        isPresented.toggle()
-                    },
-                    label: {
-                        Text("App Icon")
+                Section(content: {
+                    PremiumNavigationLink {
+                        EmptyView()
+                    } label: {
+                        Text("Hello, World!")
                     }
-                ).lockable()
-                
-                Toggle(isOn: $isPremium) {
-                    Text("isPremium")
-                }
+                    
+                    PremiumButton(
+                        action: {
+                            isPresented.toggle()
+                        },
+                        label: {
+                            Text("App Icon")
+                        }
+                    )
+                    
+                    PremiumToggle(
+                        isOn: $isOn,
+                        label: {
+                            Text("Show User Info")
+                        },
+                        storeView: {
+                            Text("Store")
+                        }
+                    )
+                }, header: {
+                    Text("Lockable = false")
+                })
             }
+            .toolbar(content: {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Toggle(isOn: $isPremium) {
+                        Text("isPremium")
+                    }.toggleStyle(.switch)
+                }
+            })
         }
         .sheet(isPresented: $isPresented, content: {
             ChildView()
