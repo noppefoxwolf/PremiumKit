@@ -21,6 +21,9 @@ struct ContentView: View {
     @State
     var selection: SelectionValue = .fox
     
+    @State
+    var value: Double = 100
+    
     var body: some View {
         NavigationView {
             List {
@@ -86,6 +89,24 @@ struct ContentView: View {
             },
             label: {
                 Text("Who is favourite animal?")
+            },
+            storeView: {
+                Text("Store")
+            }
+        )
+        
+        PremiumSlider(
+            value: $value,
+            inRange: 0...100,
+            step: 10,
+            label: {
+                Text("Font")
+            },
+            minimumValueLabel: {
+                Image(systemName: "textformat.size.smaller")
+            },
+            maximumValueLabel: {
+                Image(systemName: "textformat.size.larger")
             },
             storeView: {
                 Text("Store")

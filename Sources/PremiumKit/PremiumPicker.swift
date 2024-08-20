@@ -34,7 +34,9 @@ public struct PremiumPicker<SelectionValue: Hashable, Content: View, Label: View
         if isPremium {
             Picker(selection: _selection, content: content, label: label)
         } else {
+            // TODO: It preffer to use PremiumButto, if this style is navigationLink.
             LockedLabel(label: label)
         }
     }
 }
+
