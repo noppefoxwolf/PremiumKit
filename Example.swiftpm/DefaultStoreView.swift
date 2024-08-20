@@ -1,5 +1,6 @@
 import StoreKit
 import SwiftUI
+import PremiumKit
 
 extension PremiumButton where StoreView == DefaultStoreView {
     public init(action: @escaping () -> Void, label: @escaping () -> Label) {
