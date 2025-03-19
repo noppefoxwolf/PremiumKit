@@ -21,10 +21,10 @@ extension PremiumNavigationLink where StoreView == DefaultStoreView {
     ) {
         self.init(
             destination: destination,
+            label: label,
             storeView: {
                 DefaultStoreView()
-            },
-            label: label
+            }
         )
     }
 }

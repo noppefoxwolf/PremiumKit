@@ -24,6 +24,9 @@ struct ContentView: View {
     @State
     var value: Double = 100
     
+    @State
+    var isPaywallPresented: Bool = false
+    
     var body: some View {
         NavigationView {
             List {
@@ -45,10 +48,23 @@ struct ContentView: View {
                         Text("isPremium")
                     }.toggleStyle(.switch)
                 }
+                
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        isPaywallPresented.toggle()
+                    } label: {
+                        Image(systemName: "crown")
+                    }
+                }
             })
         }
         .sheet(isPresented: $isPresented, content: {
             ChildView()
+        })
+        .sheet(isPresented: $isPaywallPresented, content: {
+            NavigationView {
+                
+            }
         })
         .environment(\.isPremium, isPremium)
     }
@@ -97,7 +113,7 @@ struct ContentView: View {
         
         PremiumSlider(
             value: $value,
-            inRange: 0...100,
+            in: 0...100,
             step: 10,
             label: {
                 Text("Font")
