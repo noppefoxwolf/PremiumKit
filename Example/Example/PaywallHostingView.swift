@@ -10,6 +10,11 @@ final class PaywallHostingViewModel {
         case purchasable([StoreKit.Product])
         case unavailable
     }
+    let subscriptionProductIDs = [
+        "dev.noppe.snowfox.monthly",
+        "dev.noppe.snowfox.yearly",
+    ]
+    let lifetimeProductID = "dev.noppe.snowfox.lifetime"
     
     var error: (any Error)? = nil
     var configuration: PaywallViewConfiguration? = nil
@@ -23,7 +28,7 @@ final class PaywallHostingViewModel {
         switch entitlement {
         case .verified(let transaction):
             verifiedTransactions.insert(transaction)
-        case .unverified(let transaction, let error):
+        case .unverified(_, let error):
             self.error = error
         }
         updateState()
@@ -31,11 +36,9 @@ final class PaywallHostingViewModel {
     
     func retrieveProducts() async {
         do {
-            availableProducts = try await Product.products(for: [
-                "dev.noppe.snowfox.monthly",
-                "dev.noppe.snowfox.yearly",
-                "dev.noppe.snowfox.lifetime",
-            ])
+            availableProducts = try await Product.products(
+                for: subscriptionProductIDs + [lifetimeProductID]
+            )
         } catch {
             self.error = error
         }
@@ -43,12 +46,13 @@ final class PaywallHostingViewModel {
     }
     
     private func updateState() {
-        if let id = verifiedTransactions.first?.productID, let product = availableProducts.first(where: { $0.id == id }) {
+        let verifiedProductID = verifiedTransactions.first?.productID
+        if let verifiedProductID, let product = availableProducts.first(where: { $0.id == verifiedProductID }) {
             self.state = .purchased(product)
             return
         }
         
-        if let error {
+        if let _ = error {
             self.state = .unavailable
             return
         }
@@ -84,34 +88,35 @@ struct PaywallHostingView: View {
         case .purchased(let product):
             Text("entitlement \(product.id)")
         case .purchasable(let products):
+            let features: [Feature] = [
+                .init(
+                    title: "カスタムアイコン",
+                    description: "あああ"
+                ),
+                .init(
+                    title: "ポストの投稿",
+                    description: "あああああああ"
+                ),
+                .init(
+                    title: "ポストの投稿",
+                    description: "あああああああああああああああああああああああああああああああああああああああああああああああああ"
+                ),
+            ]
+            let reviews: [Review] = [
+                .init(
+                    reviewer: "noppe",
+                    rating: 5,
+                    comment: "aaaa"
+                )
+            ]
             let configuration = PaywallViewConfiguration(
                 title: "DAWN Pro",
                 products: products,
-                features: [
-                    .init(
-                        title: "カスタムアイコン",
-                        description: "あああ"
-                    ),
-                    .init(
-                        title: "ポストの投稿",
-                        description: "あああああああ"
-                    ),
-                    .init(
-                        title: "ポストの投稿",
-                        description: "あああああああああああああああああああああああああああああああああああああああああああああああああ"
-                    ),
-                ],
-                reviews: [
-                    .init(
-                        reviewer: "noppe",
-                        rating: 5,
-                        comment: "aaaa"
-                    )
-                ],
+                features: features,
+                reviews: reviews,
                 privacyPolicyURL: URL(string: "https://www.apple.com/legal/privacy/en-ww/")!,
                 termsOfServiceURL: URL(string: "https://www.apple.com/legal/internet-services/terms/site.html")!
             )
-
             PaywallView(content: {
                 TimelineView(.animation) { timeline in
                     let seconds = timeline
