@@ -86,7 +86,7 @@ struct PaywallHostingView: View {
         case .loading:
             ProgressView()
         case .purchased(let product):
-            Text("entitlement \(product.id)")
+            Text(product.displayName)
         case .purchasable(let products):
             let features: [Feature] = [
                 .init(
