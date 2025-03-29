@@ -61,11 +61,14 @@ struct ContentView: View {
         .sheet(isPresented: $isPresented, content: {
             ChildView()
         })
-        .sheet(isPresented: $isPaywallPresented, content: {
-            NavigationView {
-                
+        .fullScreenCover(
+            isPresented: $isPaywallPresented,
+            content: {
+                NavigationView {
+                    PaywallHostingView()
+                }
             }
-        })
+        )
         .environment(\.isPremium, isPremium)
     }
     
