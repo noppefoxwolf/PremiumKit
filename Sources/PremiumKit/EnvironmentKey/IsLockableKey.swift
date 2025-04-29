@@ -38,3 +38,9 @@ extension UIMutableTraits {
         set { self[IsLockableTrait.self] = newValue }
     }
 }
+
+extension View {
+    public func lockable(_ isLockable: Bool = true) -> some View {
+        environment(\.isLockable, isLockable)
+    }
+}
