@@ -25,7 +25,7 @@ struct ContentView: View {
     var value: Double = 100
     
     @State
-    var isPaywallPresented: Bool = false
+    var isManageSubscriptionsSheetPresented: Bool = false
     
     var body: some View {
         NavigationView {
@@ -41,6 +41,13 @@ struct ContentView: View {
                 }, header: {
                     Text("Lockable = false")
                 })
+                
+                Section(content: {
+                    components
+                }, header: {
+                    Text("Default")
+                })
+                .environment(\.isPremium, true)
             }
             .toolbar(content: {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -51,7 +58,7 @@ struct ContentView: View {
                 
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
-                        isPaywallPresented.toggle()
+                        isManageSubscriptionsSheetPresented.toggle()
                     } label: {
                         Image(systemName: "crown")
                     }
@@ -61,18 +68,14 @@ struct ContentView: View {
         .sheet(isPresented: $isPresented, content: {
             ChildView()
         })
-        .sheet(isPresented: $isPaywallPresented, content: {
-            NavigationView {
-                
-            }
-        })
+        .manageSubscriptionsSheet(isPresented: $isManageSubscriptionsSheetPresented)
         .environment(\.isPremium, isPremium)
     }
     
     @ViewBuilder
     var components: some View {
         PremiumNavigationLink {
-            EmptyView()
+            Text("Hello, World!")
         } label: {
             Text("Hello, World!")
         }
