@@ -63,4 +63,5 @@ public struct DefaultStoreView: View {
 
 enum ExampleFeature: String {
     case appIcon
+    case animal
 }

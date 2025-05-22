@@ -109,7 +109,7 @@ struct ContentView: View {
             label: {
                 Text("Who is favourite animal?")
             }
-        )
+        ).featureIdentifier(ExampleFeature.animal.rawValue)
         
         PremiumSlider(
             value: $value,
