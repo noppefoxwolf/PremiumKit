@@ -84,7 +84,7 @@ struct ContentView: View {
             label: {
                 Text("App Icon")
             }
-        )
+        ).featureIdentifier(ExampleFeature.appIcon.rawValue)
         
         PremiumToggle(
             isOn: $isOn,
@@ -105,9 +105,6 @@ struct ContentView: View {
             },
             label: {
                 Text("Who is favourite animal?")
-            },
-            storeView: {
-                Text("Store")
             }
         )
         

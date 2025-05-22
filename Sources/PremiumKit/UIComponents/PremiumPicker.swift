@@ -4,6 +4,9 @@ public struct PremiumPicker<SelectionValue: Hashable, Content: View, Label: View
     @Environment(\.isPremium)
     var isPremium
     
+    @Environment(\.featureIdentifier)
+    var featureIdentifier
+    
     @State
     var isPresented: Bool = false
     
@@ -11,7 +14,7 @@ public struct PremiumPicker<SelectionValue: Hashable, Content: View, Label: View
     var selection: SelectionValue
     
     @ViewBuilder
-    let storeView: () -> StoreView
+    let storeView: (String) -> StoreView
     
     @ViewBuilder
     let label: () -> Label
@@ -23,7 +26,7 @@ public struct PremiumPicker<SelectionValue: Hashable, Content: View, Label: View
         selection: Binding<SelectionValue>,
         @ViewBuilder content: @escaping () -> Content,
         @ViewBuilder label: @escaping () -> Label,
-        @ViewBuilder storeView: @escaping () -> StoreView) {
+        @ViewBuilder storeView: @escaping (String) -> StoreView) {
         self._selection = selection
         self.content = content
         self.label = label
@@ -34,8 +37,14 @@ public struct PremiumPicker<SelectionValue: Hashable, Content: View, Label: View
         if isPremium {
             Picker(selection: _selection, content: content, label: label)
         } else {
-            // TODO: It preffer to use PremiumButto, if this style is navigationLink.
-            LockedLabel(label: label)
+            Button(action: {
+                isPresented.toggle()
+            }, label: {
+                LockedLabel(label: label)
+            })
+            .sheet(isPresented: $isPresented) {
+                storeView(featureIdentifier)
+            }
         }
     }
 }

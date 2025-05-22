@@ -7,13 +7,16 @@ public struct PremiumButton<Label: View, StoreView: View>: View {
     @Environment(\.isLockable)
     var isLockable
     
+    @Environment(\.featureIdentifier)
+    var featureIdentifier
+    
     @State
     var isPresented: Bool = false
     
     let action: () -> Void
     
     @ViewBuilder
-    let storeView: () -> StoreView
+    let storeView: (String) -> StoreView
     
     @ViewBuilder
     let label: () -> Label
@@ -21,7 +24,7 @@ public struct PremiumButton<Label: View, StoreView: View>: View {
     public init(
         action: @escaping () -> Void,
         @ViewBuilder label: @escaping () -> Label,
-        @ViewBuilder storeView: @escaping () -> StoreView) {
+        @ViewBuilder storeView: @escaping (String) -> StoreView) {
         self.action = action
         self.label = label
         self.storeView = storeView
@@ -32,7 +35,7 @@ public struct PremiumButton<Label: View, StoreView: View>: View {
             PremiumLabel(label: label)
         })
         .sheet(isPresented: $isPresented) {
-            storeView()
+            storeView(featureIdentifier)
         }
     }
     

@@ -7,11 +7,17 @@ public struct PremiumNavigationLink<Destination: View, StoreView: View, Label: V
     @Environment(\.isLockable)
     var isLockable
     
+    @Environment(\.featureIdentifier)
+    var featureIdentifier
+    
+    @State
+    var isPresented: Bool = false
+    
     @ViewBuilder 
     let destination: () -> Destination
     
     @ViewBuilder
-    let storeView: () -> StoreView
+    let storeView: (String) -> StoreView
     
     @ViewBuilder
     let label: () -> Label
@@ -19,7 +25,7 @@ public struct PremiumNavigationLink<Destination: View, StoreView: View, Label: V
     public init(
         @ViewBuilder destination: @escaping () -> Destination,
         @ViewBuilder label: @escaping () -> Label,
-        @ViewBuilder storeView: @escaping () -> StoreView
+        @ViewBuilder storeView: @escaping (String) -> StoreView
     ) {
         self.destination = destination
         self.label = label
@@ -27,23 +33,23 @@ public struct PremiumNavigationLink<Destination: View, StoreView: View, Label: V
     }
     
     public var body: some View {
-        NavigationLink(
-            destination: {
-                linkDestination()
-            },
-            label: {
-                PremiumLabel(label: label)
-            }
-        )
-    }
-    
-    @ViewBuilder
-    func linkDestination() -> some View {
         switch (isLockable, isPremium) {
         case (true, false):
-            storeView()
+            Button(action: {
+                isPresented.toggle()
+            }, label: {
+                LockedLabel(label: label)
+            })
+            .sheet(isPresented: $isPresented) {
+                storeView(featureIdentifier)
+            }
         default:
-            destination()
+            NavigationLink(
+                destination: destination,
+                label: {
+                    PremiumLabel(label: label)
+                }
+            )
         }
     }
 }
