@@ -31,6 +31,11 @@ extension PremiumNavigationLink where StoreView == DefaultStoreView {
 
 public struct DefaultStoreView: View {
     public var body: some View {
-        StoreKit.StoreView(ids: [])
+        StoreKit.SubscriptionStoreView(
+            productIDs: ["dev.noppe.example.monthly"],
+            marketingContent: {
+                Text("Hello, World!")
+            }
+        )
     }
 }
